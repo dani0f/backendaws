@@ -1,2 +1,4 @@
 init mongo: mongod
 in powershell
+ssh ubuntu@54.146.15.44 -i demosigdo.pem
+

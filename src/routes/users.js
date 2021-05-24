@@ -7,7 +7,6 @@ const bcrypt = require('bcrypt');
 
 //grabbing user info
 router.get('/user', (req, res, next) => {
-  console.log(req.headers.token)
   let token = req.headers.token; //token
   jwt.verify(token, 'secretkey', (err, decoded) => {
     if (err) return res.status(401).json({
@@ -15,14 +14,13 @@ router.get('/user', (req, res, next) => {
     })
     //token is valid
     UserSchema.findOne({ _id: decoded.userId }, (err, user) => {
-      console.log(user)
-      if (err) return console.log(err)
       return res.status(200).json({
         title: 'user grabbed',
         user: {
           username: user.username,
           name: user.name,
-          accessLevel : user.accessLevel
+          accessLevel : user.accessLevel,
+          _id:user._id
         }
       })
     })
@@ -50,7 +48,6 @@ router.post('/login', (req, res, next) => {
       })
     }
     //IF ALL IS GOOD create a token and send to frontend
-    console.log("login")
     let token = jwt.sign({ userId: user._id}, 'secretkey');
     return res.status(200).json({
       title: 'login sucess',
@@ -74,7 +71,8 @@ router.post('/',async (req,res) =>{
     const newUser = new UserSchema({
     username: req.body.username,
     name: req.body.name,
-    password: bcrypt.hashSync(req.body.password, 10)
+    password: bcrypt.hashSync(req.body.password, 10),
+    accessLevel: req.body.accessLevel    
     })
     newUser.save(err => {
     if (err) {
@@ -89,7 +87,10 @@ router.post('/',async (req,res) =>{
   })
 });
 router.put('/:id', async (req,res) =>{
-    await UserSchema.findByIdAndUpdate(req.params.id , req.body);
+    await UserSchema.findByIdAndUpdate(req.params.id, req.body);
+    await UserSchema.findByIdAndUpdate(req.params.id, {
+      password: bcrypt.hashSync(req.body.password, 10)});
+
     res.json({
         status: 'user Update'
     })
