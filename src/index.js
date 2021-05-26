@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 //routes
 app.use('/api/orders',require('./routes/orders'));
 
-app.use('/api/Users',require('./routes/Users'));
+app.use('/api/users',require('./routes/users'));
 
 //Static files
 
