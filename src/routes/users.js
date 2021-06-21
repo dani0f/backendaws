@@ -37,14 +37,14 @@ router.post('/login', (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         title: 'user not found',
-        error: 'invalid credentials'
+        error: 'Invalid username or password'
       })
     }
     //incorrect password
     if (!bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(401).json({
         tite: 'login failed',
-        error: 'invalid credentials'
+        error: 'Invalid username or password'
       })
     }
     //IF ALL IS GOOD create a token and send to frontend
@@ -87,17 +87,39 @@ router.post('/',async (req,res) =>{
   })
 });
 router.put('/:id', async (req,res) =>{
-    await UserSchema.findByIdAndUpdate(req.params.id, req.body);
-    await UserSchema.findByIdAndUpdate(req.params.id, {
-      password: bcrypt.hashSync(req.body.password, 10)});
-
-    res.json({
-        status: 'user Update'
-    })
-
+  const pss = req.body.password;
+  if (pss == ""){
+    try {
+      await UserSchema.findByIdAndUpdate(req.params.id, {
+        username: req.body.username,
+        name: req.body.name,
+        accessLevel: req.body.accessLevel });           
+    } catch (error) {
+      console.log(error)
+    }
+ 
+  }
+  else{
+    try {
+      await UserSchema.findByIdAndUpdate(req.params.id, {
+        username: req.body.username,
+        name: req.body.name,
+        password: bcrypt.hashSync(req.body.password, 10),
+        accessLevel: req.body.accessLevel });       
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  res.json({
+    status: 'user Update'
+  })
 });
 router.delete('/:id',async (req, res) =>{
+  try {
     await UserSchema.findByIdAndRemove(req.params.id);
+  } catch (error) {
+    console.log(error)
+  }
     res.json({
         status: 'user Removed'
     })

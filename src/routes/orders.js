@@ -66,29 +66,23 @@ router.get('/suppliers', async (req,res) => {
     }
     res.json(data);
 });
-//"proveedor"
-//"proyecto"
 
 
 router.post('/kpi', async (req,res) => {
-    var start =  new Date("2010-01-01")
     let user = req.headers.user; //token
     console.log(user,"user")
     var query = {
-        deliverydate: {"$gte" : start, "$lte" : req.body.date},
+        deliverydate: {"$gte" : req.body.initialDate, "$lte" : req.body.date},
         proveedor: req.body.suplier,
         proyecto: req.body.project,
         userId: user
     }
     console.log(query)
-    orders = await orderSchema.find(query,{deliverydate:1,proyecto:1,proveedor:1,promisedate:1,})
+    orders = await orderSchema.find(query,{deliverydate:1,proyecto:1,proveedor:1,fechadespacho:1})
     console.log(orders)
     res.json(orders)
 });
 
-//db.coleccion.find({documentdate : {"$gte" : start, "$lte" : end}})
-//documentdate o deliverydate
-//due date es deliverydate
 
 router.get('/', async (req,res) => {
     let user = req.headers.user; //token

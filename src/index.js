@@ -6,7 +6,7 @@ const app = express();
 
 //settings
 app.set('port', process.env.PORT || 3000);
-mongoose.connect('mongodb+srv://demouserDB:demouserDB123@cluster0.olnck.mongodb.net/demoDB?retryWrites=true&w=majoritye')
+mongoose.connect('mongodb+srv://demouserDB:demouserDB123@cluster0.olnck.mongodb.net/demoDB?retryWrites=true&w=majoritye', { useNewUrlParser: true })
     .then(db => console.log('DB is connected'))
     .catch(err => console.error(err));
 app.use(bp.json({limit: '50mb'}));
@@ -16,8 +16,7 @@ app.use(bp.urlencoded({limit: '50mb', extended: true}));
 //CORS config
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
-    //Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin','http://demosigdoapp.s3-website-us-east-1.amazonaws.com');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     // Request headers you wish to allow
@@ -31,7 +30,7 @@ app.use(function (req, res, next) {
 //routes
 app.use('/api/orders',require('./routes/orders'));
 
-app.use('/api/users',require('./routes/users'));
+app.use('/api/Users',require('./routes/Users'));
 
 //Static files
 

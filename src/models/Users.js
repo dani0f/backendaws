@@ -3,17 +3,31 @@ const { Schema } = mongoose;
 
 
 const UserSchema = new Schema({
-    name: String,
+    name: {
+        type: String,
+        required: [true, 'Category required'],
+        minlength:[3,'Minimun code length 3 characters']
+    },
     username: {
         type: String,
+        required: [true, 'Category required'],  
+        minlength:[3,'Minimun code length 3 characters'],
+        maxlength:[25, 'Maximun code length 25 characters'],              
         unique: true
     },
-    password: String,
+    password:{
+        type: String,
+        required: [true, 'Category required'],
+        minlength:[7,'Minimun code length 7 characters'], 
+        
+    },
     accessLevel: {
         type:Number,
-        default: 1
+        min: [1, ''],
+        max: [2,' ']
     }
 });
 
 module.exports = mongoose.model('User', UserSchema);
+
 
