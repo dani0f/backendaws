@@ -10,6 +10,7 @@ router.post('/import',async (req,res) =>{
         return date;
     }
     userId = req.body.userId
+    console.log("import from ", userId)
     var options = { upsert:true };
     req.body.results.forEach(async element => {
         var proyecto ="" 

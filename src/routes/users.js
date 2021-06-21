@@ -68,6 +68,7 @@ router.get('/:id', async (req,res) => {
 });
 
 router.post('/',async (req,res) =>{
+    console.log("create user :",req.body.username)
     const newUser = new UserSchema({
     username: req.body.username,
     name: req.body.name,
@@ -87,6 +88,7 @@ router.post('/',async (req,res) =>{
   })
 });
 router.put('/:id', async (req,res) =>{
+  console.log("edit userid:",req.params.id)
   const pss = req.body.password;
   if (pss == ""){
     try {
@@ -95,7 +97,6 @@ router.put('/:id', async (req,res) =>{
         name: req.body.name,
         accessLevel: req.body.accessLevel });           
     } catch (error) {
-      console.log(error)
     }
  
   }
@@ -107,7 +108,6 @@ router.put('/:id', async (req,res) =>{
         password: bcrypt.hashSync(req.body.password, 10),
         accessLevel: req.body.accessLevel });       
     } catch (error) {
-      console.log(error)
     }
   }
   res.json({
@@ -115,10 +115,10 @@ router.put('/:id', async (req,res) =>{
   })
 });
 router.delete('/:id',async (req, res) =>{
+  console.log("delete userid:",req.params.id)
   try {
     await UserSchema.findByIdAndRemove(req.params.id);
   } catch (error) {
-    console.log(error)
   }
     res.json({
         status: 'user Removed'
